@@ -1,0 +1,38 @@
+AZURE_WORKSPACE_CREDENTIALS:
+  subscription_id: 
+  resource_group: 
+  workspace_name: 
+
+AZURE_STORAGE:
+  AZ_OPEN_CLOSED: 'container_open_closed/'
+
+OPEN_CLOSED_LABELS:
+  - containers_open_closed_20221115_074852
+
+  # Share of training and validation data
+TRAIN_VAL_SPLIT: 0.8
+
+PREDICTION_MODEL:
+  model: 
+  threshold : 0.5
+  # Buffer around bbox
+  buffer: 50
+
+ESSENTIAL_PATHS:
+  images: 
+  dataset_lit: '../dataset_litter'
+  img_path: 
+
+YOLO_V5_PARAMETERS:
+  batch_size: 32
+  epochs: 30
+  imgsz: 1024
+  device: 0 
+
+MLFLOW:
+  exp_name : 'small_models'
+  exp_containers_name : 'yolo_open_closed_test'
+
+AZ_CONTAINERS_TEST:
+  datastore : 
+  version : 
