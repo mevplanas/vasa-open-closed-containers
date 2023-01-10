@@ -9,6 +9,9 @@ AZURE_STORAGE:
 OPEN_CLOSED_LABELS:
   - containers_open_closed_20221115_074852
 
+  # Share of training and validation data
+TRAIN_VAL_SPLIT: 0.8
+
 PREDICTION_MODEL:
   model: 
   threshold : 0.5
@@ -28,8 +31,8 @@ YOLO_V5_PARAMETERS:
 
 MLFLOW:
   exp_name : 'small_models'
-  exp_containers_name : 'yolo_test'
+  exp_containers_name : 'yolo_open_closed_test'
 
 AZ_CONTAINERS_TEST:
-  datastore : 'containers_test_dataset'
-  version : 'test_dataset_v3'
+  datastore : 
+  version : 
