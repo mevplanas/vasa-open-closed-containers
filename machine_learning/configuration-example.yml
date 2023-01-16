@@ -1,4 +1,4 @@
-path: C:\GIS\Projektai\VASA_siuksles\ML\vasa\machine_learning_open_closed # dataset root dir
+path: C:\GIS\Projektai\VASA_siuksles\vasa-open-closed-containers\machine_learning # dataset root dir
 train: train/images/  # train images (relative to 'path') 
 val: val/images/ # val images (relative to 'path')
 
