@@ -188,3 +188,28 @@ def labels_delete(labels_dir: str, max_width: float, max_height: float):
                     data.write(line)
             # Closing txt
             data.close()
+
+
+def labels_renamer(labels_dir: str):
+    """
+    The functions renames attapol labels
+
+    Arguments
+    ---------
+    labels_dir: str
+        folder with open/closed labels
+    """
+    # Get all label files in a list
+    labels = os.listdir(labels_dir)
+    # Iterate thorugh all labels
+    for _label in labels:
+        # Construct new label filename
+        _label_str_el = _label.split('_')
+        _label_str_el = _label_str_el[1:]
+        label = '_'.join(_label_str_el)
+        # Renaming label
+        src_file_path = os.path.join(labels_dir, _label)
+        dest_file_path = os.path.join(labels_dir, label)
+        os.rename(src_file_path, dest_file_path)
+
+
