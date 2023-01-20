@@ -6,7 +6,7 @@ import shutil
 from tqdm import tqdm
 
 
-def remove_reapeated(list_one: list, list_two: list) -> None:
+def remove_reapeated(list_one: list, list_two: list) -> list:
     """
     The function deletes repeating elements from first list in comparison with second list
 
@@ -31,7 +31,6 @@ def remove_reapeated(list_one: list, list_two: list) -> None:
             list_diff.append(el)
 
     return list_diff
-
 
 
 def move_files(
