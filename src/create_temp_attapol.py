@@ -22,13 +22,13 @@ def pipeline():
     create_dir(_target_dir)
 
     # The directory where the data where downloaded
-    _download_dir = os.path.join(current_path, '..', 'dataset', 'attapol', 'container_open_closed_attapol')
+    _download_dir = os.path.join(current_path, '..', 'dataset', 'attapol')
 
     # The directory where the data where downloaded
-    images_dir = os.path.join(current_path, '..', 'dataset', 'attapol', 'container_open_closed_attapol', 'images')
+    images_dir = os.path.join(current_path, '..', 'dataset', 'attapol', 'images')
 
     # The directory where the data where downloaded
-    labels_dir = os.path.join(current_path, '..', 'dataset', 'attapol', 'container_open_closed_attapol', 'labels')
+    labels_dir = os.path.join(current_path, '..', 'dataset', 'attapol', 'labels')
 
     # Images temp path
     images_temp = os.path.join(current_path, '..', 'dataset', 'images', 'temp')

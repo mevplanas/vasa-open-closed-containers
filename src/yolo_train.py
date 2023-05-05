@@ -1,7 +1,6 @@
-from yolov5 import train
+from ultralytics import YOLO
 import os
 import yaml
-# Azure sdk
 from azureml.core import Workspace
 import mlflow
 import os
@@ -9,7 +8,8 @@ import glob
 from PIL import Image
 import pandas as pd
 
-def yolo_v5_train():
+
+def yolo_v8_train():
     """
     The function creates yolo model for object detection.
     """
@@ -23,13 +23,13 @@ def yolo_v5_train():
             print(exc)
 
     # Path to experments directory
-    train_dir = os.path.join(current_path, '..', 'runs', 'train')
+    train_dir = os.path.join(current_path, '..', 'runs', 'detect')
     # Path to yolo configuration file
-    data = os.path.join(current_path, '..', 'machine_learning', 'configuration.yml')
+    data = os.path.join(current_path, '..', 'machine_learning', 'configuration.yaml')
     # Define pretrained model
-    pretrained_model = _conf['YOLO_V5_PARAMETERS']['pretrained_model']
+    pretrained_model = _conf['YOLO_V8_PARAMETERS']['pretrained_model']
     # Loading pre trained yolo model
-    weights = os.path.join(current_path, '..', 'machine_learning', 'yolov5s.pt')
+    weights = os.path.join(current_path, '..', 'machine_learning', 'yolov8l.pt')
     
     #Enter details of your AzureML workspace
     subscription_id = _conf['AZURE_WORKSPACE_CREDENTIALS']['subscription_id']
@@ -52,12 +52,15 @@ def yolo_v5_train():
     # Starting the tracking of mlflow experiment
     mlflow.start_run()
     
-
     # Loading model training parameters
-    batchsize = _conf['YOLO_V5_PARAMETERS']['batch_size']
-    epochs = _conf['YOLO_V5_PARAMETERS']['epochs']
-    imgsz = _conf['YOLO_V5_PARAMETERS']['imgsz']
-    device = _conf['YOLO_V5_PARAMETERS']['device']
+    batchsize = _conf['YOLO_V8_PARAMETERS']['batch_size']
+    epochs = _conf['YOLO_V8_PARAMETERS']['epochs']
+    imgsz = _conf['YOLO_V8_PARAMETERS']['imgsz']
+    device = _conf['YOLO_V8_PARAMETERS']['device']
+    # optimizer = _conf['YOLO_V8_PARAMETERS']['optimizer']
+    # lr0 = _conf['YOLO_V8_PARAMETERS']['lr0']
+    # lrf = _conf['YOLO_V8_PARAMETERS']['lrf']
+
 
     # Logging parameters to MLFlow
     mlflow.log_params(
@@ -66,7 +69,10 @@ def yolo_v5_train():
             'epochs' : epochs,
             'imgsz' : imgsz,
             'device' : device,
-            'pretrained_model' : pretrained_model
+            'pretrained_model' : pretrained_model,
+            # 'optimizer' : optimizer,
+            # 'lr0': lr0,
+            # 'lrf': lrf
         }
     )
 
@@ -101,7 +107,8 @@ def yolo_v5_train():
     )
 
     # Train model on custom dataset
-    train.run(data=data, weights=weights, batchsize=batchsize, epochs=epochs, imgsz=imgsz, device=device)
+    model = YOLO(weights)
+    model.train(data=data, batch=batchsize, epochs=epochs, imgsz=imgsz, device=device)
 
     # Get last created directory from train directory
     train_dirs = os.listdir(train_dir)
@@ -138,25 +145,26 @@ def yolo_v5_train():
             i+=1
     
     # Get model metrics from results.html
-    results_html = os.path.join(latest_dir, 'results.html')
-    table = pd.read_html(results_html)
-    table = table[0]
+    results_csv = os.path.join(latest_dir, 'results.csv')
+    _df = pd.read_csv(results_csv)
+    _df = _df.tail(1)
 
-    # Loggin images and labels count from results.html
-    for index, row in table.iterrows():
-        mlflow.log_params({
-            f'{row["Class"]}_val_images' : row['Images'],
-            f'{row["Class"]}_val_labels' : row['Labels']
-        })
-    
-    # Logging metrics from results.html
-    for index, row in table.iterrows():
-        mlflow.log_metrics({
-            f'{row["Class"]}_precision' : row['P'],
-            f'{row["Class"]}_recall' : row['R'],
-            f'{row["Class"]}_mAP@.5' : row['mAP@.5'],
-            f'{row["Class"]}_mAP@.5:.95' : row['mAP@.5:.95'],
-            })
+    # Logging metrics from results.csv
+    mlflow.log_metrics({
+        'train_box_loss' : _df['         train/box_loss'],
+        'train_cls_loss' : _df['         train/cls_loss'],
+        'train_dfl_loss' : _df['         train/dfl_loss'],
+        'precision_B' : _df['   metrics/precision(B)'],
+        'recall_B' : _df['      metrics/recall(B)'],
+        'mAP50_B' : _df['       metrics/mAP50(B)'],
+        'mAP50_95_B' : _df['    metrics/mAP50-95(B)'],
+        'val_box_loss' : _df['           val/box_loss'],
+        'val_cls_loss' : _df['           val/cls_loss'],
+        'val_dfl_loss' : _df['           val/dfl_loss'],
+        'lr_pg0' : _df['                 lr/pg0'],
+        'lr_pg1' : _df['                 lr/pg1'],
+        'lr_pg2' : _df['                 lr/pg2']
+    })
 
     # Logging model to MLFlow
     path_to_model = os.path.join(latest_dir, 'weights\\best.pt')
@@ -166,4 +174,4 @@ def yolo_v5_train():
     mlflow.end_run()
 
 if __name__ == '__main__':
-    yolo_v5_train()
+    yolo_v8_train()

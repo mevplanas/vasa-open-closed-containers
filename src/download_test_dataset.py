@@ -30,8 +30,7 @@ def pipeline():
     
     # Get test data from Azure
     datastore = Datastore.get(workspace, az_datastore)
-    dataset = Dataset.File.from_files(path=(datastore, az_dataset))
-    dataset.download(target_path=_download_dir, overwrite=True)
+    datastore.download(target_path=_download_dir, overwrite=True)
 
      # Checking images
     for dirpath, _, files in os.walk(_download_dir):
