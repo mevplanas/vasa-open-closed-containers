@@ -23,4 +23,15 @@ YOLO_V5_PARAMETERS:
 
 MLFLOW:
   exp_name : 'small_models'
-  exp_containers_name : 'yolo_open_closed_test'
+  exp_containers_name : 'yolo_open_closed'
+
+PREDICTION_MODEL:
+  model: 'machine_learning\best.pt'
+  threshold: 0.3
+
+YOLO_V8_PARAMETERS:
+  batch_size: 16
+  epochs: 60
+  imgsz: 500
+  device: 0
+  pretrained_model : 'yolov8l.pt'
