@@ -32,6 +32,7 @@ def pipeline():
     datastore = Datastore.get(workspace, az_datastore)
     datastore.download(target_path=_download_dir, overwrite=True)
 
+
      # Checking images
     for dirpath, _, files in os.walk(_download_dir):
         for file_name in files:
@@ -40,6 +41,5 @@ def pipeline():
             # Rewriting image to avoid corrupt image error
             cv_rewrite(_full_path)
 
-            
 if __name__ == '__main__':
     pipeline()

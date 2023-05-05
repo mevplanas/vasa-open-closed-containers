@@ -79,9 +79,10 @@ def pipeline() -> None:
 
     # Define the path to test images
     _images_dir_test = os.path.join(current_path, '..', 'dataset', 'test', 'images')
-
     # Define the path to labels
     _labels_dir_test = os.path.join(current_path, '..', 'dataset', 'test', 'labels')
+
+
     
     # Listing the files in the temp dir 
     _images = os.listdir(_images_dir_temp)
