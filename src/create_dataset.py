@@ -79,10 +79,9 @@ def pipeline() -> None:
 
     # Define the path to test images
     _images_dir_test = os.path.join(current_path, '..', 'dataset', 'test', 'images')
+
     # Define the path to labels
-    _labels_dir_test = os.path.join(current_path, '..', 'dataset', 'test', 'labels')
-
-
+    _labels_dir_test = os.path.join(current_path, '..', 'dataset', 'test',  'labels')
     
     # Listing the files in the temp dir 
     _images = os.listdir(_images_dir_temp)
@@ -100,8 +99,15 @@ def pipeline() -> None:
     _images_dict = {file_name.split('.')[0]: file_name for file_name in _images}
     _labels_dict = {file_name.split('.')[0]: file_name for file_name in _labels}
 
+    # Creating a dictionary with no file ending for images
+    _images_dict_val = {file_name.split('.')[0]: file_name for file_name in _images_test}
+    _labels_dict_val = {file_name.split('.')[0]: file_name for file_name in _labels_test}
+
     # Only leaving the intersecting keys 
     _keys = list(set(_images_dict.keys()).intersection(set(_labels_dict.keys())))
+
+    # Only leaving the intersecting keys 
+    _keys_val = list(set(_images_dict_val.keys()).intersection(set(_labels_dict_val.keys())))
 
     # Defining the path to machine_learning dir 
     _ml_dir = os.path.join(current_path, '..', 'machine_learning')
@@ -109,22 +115,27 @@ def pipeline() -> None:
     # Defining the train and val directories for images and labels 
     _images_dir_train = os.path.join(_ml_dir, 'train', 'images')
     _labels_dir_train = os.path.join(_ml_dir, 'train', 'labels')
-    _dir_val = os.path.join(_ml_dir, 'val')
+
+    _images_dir_val = os.path.join(_ml_dir, 'val', 'images')
+    _labels_dir_val = os.path.join(_ml_dir, 'val', 'labels')
 
     # Creating the train and val directories for images and labels
     os.makedirs(_images_dir_train, exist_ok=True)
     os.makedirs(_labels_dir_train, exist_ok=True)
-    os.makedirs(_dir_val, exist_ok=True)
+    os.makedirs(_images_dir_val, exist_ok=True)
+    os.makedirs(_labels_dir_val, exist_ok=True)
 
     # Populating the training images 
     move_files(_keys, _images_dir_temp, _images_dir_train, _images_dict, 'Moving training images')
     
     # Populating the training labels
     move_files(_keys, _labels_dir_temp, _labels_dir_train, _labels_dict, 'Moving training labels')
+
+    # Populating the training images 
+    move_files(_keys_val, _images_dir_test, _images_dir_val, _images_dict_val, 'Moving validation images')
     
-    # Move validation images and labels
-    shutil.move(_images_dir_test, _dir_val)
-    shutil.move(_labels_dir_test, _dir_val)
+    # Populating the training labels
+    move_files(_keys_val, _labels_dir_test, _labels_dir_val, _labels_dict_val, 'Moving validation labels')
 
 if __name__ == '__main__':
     pipeline()
