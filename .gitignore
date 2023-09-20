@@ -47,6 +47,7 @@ MANIFEST
 
 # YAML configuration file
 configuration.yml
+machine_learning/configuration.yaml
 
 # Installer logs
 pip-log.txt
