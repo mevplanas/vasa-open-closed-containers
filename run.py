@@ -8,6 +8,9 @@ from src.yolo_train import yolo_v8_train
 from src.attapol_import import pipeline as attapol_import_pipeline
 from src.create_temp_attapol import pipeline as temp_attapol_pipeline
 from src.download_test_dataset import pipeline as download_test_dataset
+from src.false_labels_remover import pipeline as label_remover
+from src.delete_empty import pipeline as delete_empty
+from src.delete_no_labels_image import pipeline as delete_img_labels
 
 def pipeline() -> None:
     """
@@ -19,6 +22,12 @@ def pipeline() -> None:
     attapol_import_pipeline()
     # Copy images and labels to temp folders
     temp_attapol_pipeline()
+    # Delete false labels from label.txt
+    label_remover()
+    # Delete empty label.txt
+    delete_empty()
+    # Delete images and labels with no coresponding image
+    delete_img_labels()
     # Downloading labeled images 
     images_download_pipeline()
     # Creating the temp images

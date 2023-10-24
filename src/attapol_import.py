@@ -20,7 +20,6 @@ def pipeline():
     # Get Datastore name
     az_datastore = _conf['AZ_OPEN_CLOSED_ATTAPOL']['datastore']
     # Get Datastore name
-    az_dataset = _conf['AZ_OPEN_CLOSED_ATTAPOL']['dataset']
 
     # Initiating the connection to the workspace
     workspace = Workspace(**_conf.get('AZURE_WORKSPACE_CREDENTIALS'))
